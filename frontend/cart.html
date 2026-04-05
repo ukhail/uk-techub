@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart - UKTECHUB</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        *{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        .cart-main { max-width: 1200px; margin: 120px auto 50px; padding: 0 20px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px; color: white; }
+        .page-title { font-size: 36px; font-weight: 700; margin-bottom: 40px; }
+        .cart-layout { display: flex; gap: 50px; align-items: flex-start; }
+        .cart-items-section { flex: 2; }
+        .cart-table { width: 100%; border-collapse: collapse; }
+        .cart-table th { text-align: left; padding: 15px 0; border-bottom: 1px solid #333; color: #86868b; font-size: 14px; }
+        .cart-table td { padding: 25px 0; border-bottom: 1px solid #222; vertical-align: middle; }
+        .prod-info { display: flex; align-items: center; gap: 20px; }
+        .prod-info img { width: 100px; height: 100px; background: #fff; border-radius: 12px; object-fit: contain; }
+        .p-name { font-weight: 600; font-size: 16px; color: white; margin-bottom: 4px; }
+        .p-price { color: #86868b; font-size: 14px; }
+        .qty-control { display: flex; align-items: center; border: 1px solid #d2d2d7; width: fit-content; border-radius: 8px; background: white; overflow: hidden; }
+        .qty-control button { background: #f5f5f7; border: none; padding: 8px 15px; cursor: pointer; font-size: 16px; color: black; }
+        .qty-control span { padding: 0 15px; font-weight: 500; color: black; }
+        .totals-card { background: #fff; padding: 40px; border-radius: 20px; color: #000; }
+        .total-row { display: flex; justify-content: space-between; margin: 15px 0; font-size: 16px; color: black; font-weight: 400; }
+        .main-total { font-weight: 800;justify-content: space-between; font-size: 18px; border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; color: black; }
+        .btn-primary { background: #000; color: #fff; border: none; padding: 18px; border-radius: 12px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-primary:hover { background: #0071e3; }
+        .remove-icon { color: #86868b; cursor: pointer; }
+    </style>
+</head>
+<body style="background-color: #0b0b0b;">
+    <nav class="navbar">
+        <div class="logo">🖱️UKTECHUB</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+        <li><a href="products.html">PRODUCTS</a></li>
+        <li><a href="aboutus.html">ABOUT US</a></li>
+        <li><a href="service.html">SERVICES</a></li>
+        <li><a href="contactus.html">CONTACT US</a></li>
+        </ul>
+        <div class="nav-icons" id="auth-section"><span>🔍</span></div>
+    </nav>
+
+    <main class="cart-main">
+        <h1 class="page-title">Your Bag</h1>
+        <div class="cart-layout">
+            <div class="cart-items-section">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-table-body"></tbody>
+                </table>
+            </div>
+
+            <div class="cart-totals-section">
+                <div class="totals-card">
+                    <h3>BAG TOTALS</h3>
+                    <div class="total-row">
+                        <span>SUBTOTAL</span>
+                        <span id="subtotal-price">$0.00</span>
+                    </div>
+                    <div class="total-row main-total">
+                        <span>TOTAL</span>
+                        <span id="final-total">$0.00</span>
+                    </div>
+                    <button class="btn-primary" onclick="window.location.href='checkout.html'">PROCEED TO CHECKOUT</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../JS/main.js"></script>
+    <script>
+    // 1. Get the private locker name for the logged-in user
+    const currentUser = localStorage.getItem('userName') || localStorage.getItem('loggedInUser');
+    const cartKey = currentUser ? `cart_${currentUser}` : 'cart';
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!currentUser) {
+            alert("PLEASE LOG IN TO VIEW YOUR BAG");
+            window.location.href = 'index.html'; // Redirect if not logged in
+            return;
+        }
+        renderCartTable();
+    });
+
+    function renderCartTable() {
+        // 2. Pull data from the PRIVATE key
+        const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+        const tbody = document.getElementById('cart-table-body');
+        let total = 0;
+
+        if (cart.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:100px; color:#86868b;'>YOUR BAG IS EMPTY.</td></tr>";
+            updateTotals(0);
+            return;
+        }
+
+        tbody.innerHTML = cart.map((item, index) => {
+            const qty = item.quantity || 1;
+            const sub = item.price * qty;
+            total += sub;
+            return `
+                <tr>
+                    <td>
+                        <div class="prod-info">
+                            <img src="http://localhost:5000/image/${item.image}">
+                            <div><p class="p-name">${item.name}</p><p class="p-price">$${item.price}.00</p></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="qty-control">
+                            <button onclick="changeQty(${index}, -1)">-</button>
+                            <span>${qty}</span>
+                            <button onclick="changeQty(${index}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td><span style="font-weight:700;">$${sub.toFixed(2)}</span></td>
+                    <td><i class="fa-solid fa-trash-can remove-icon" onclick="removeFromCart(${index})"></i></td>
+                </tr>
+            `;
+        }).join('');
+
+        updateTotals(total);
+    }
+
+    function changeQty(index, delta) {
+        let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+        cart[index].quantity = (cart[index].quantity || 1) + delta;
+        if (cart[index].quantity < 1) cart[index].quantity = 1;
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        renderCartTable();
+    }
+
+    function removeFromCart(index) {
+        let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+        cart.splice(index, 1);
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        renderCartTable();
+    }
+
+    function updateTotals(total) {
+        document.getElementById('subtotal-price').innerText = `$${total.toFixed(2)}`;
+        document.getElementById('final-total').innerText = `$${total.toFixed(2)}`;
+    }
+</script>
+
+   <footer>
+    <div class="footer-container">
+        <div class="footer-col brand">
+            <h3>🖱️ UK TECHUB</h3>
+            <p>Your premier destination for the latest in flagship smartphones, high-performance laptops, and premium audio ecosystems. Experience tech refined.</p>
+            <div class="social-icons">
+                <span class="s-icon">f<i class="fa-brands fa-x-twitter"></i></span>
+                <span class="s-icon"><i class="fa-brands fa-instagram"></i></span>
+                <span class="s-icon"><i class="fa-brands fa-linkedin-in"></i></span>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>EXPLORE TECH</h4>
+            <ul>
+                <li><a href="smartphones.html">Smartphones</a></li>
+                <li><a href="laptops.html">Laptops</a></li>
+                <li><a href="airpods.html">Audio & Sound</a></li>
+                <li><a href="watches.html">Wearables</a></li>
+                <li><a href="gaming.html">Gaming Gear</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>SUPPORT</h4>
+            <ul>
+                <li><a href="service.html">Repair Services</a></li>
+                <li><a href="myorders.html">Track Order</a></li>
+                <li><a href="aboutus.html">Our Story</a></li>
+                <li><a href="contactus.html">Get Help</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>PAYMENT SECURE</h4>
+            <p>Shop with confidence using our encrypted checkout gateway.</p>
+            <div class="payment-methods" style="margin-top: 20px; font-size: 20px; gap: 15px; display: flex;">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-apple-pay"></i>
+                <i class="fa-brands fa-paypal"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>Copyright © 2026 - UK TECHUB. All Rights Reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CHECKOUT - UKTECHUB</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/checkout.css">
+</head>
+<body class="checkout-page">
+    <nav class="navbar">
+        <div class="logo">🖱️UKTECHUB</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="cart.html">CART</a></li>
+        </ul>
+
+         <div class="nav-icons" id="auth-section">
+        <span>🔍</span>
+    </div>
+    </nav>
+
+    <main class="checkout-container">
+        <h1 class="main-title">CHECKOUT</h1>
+        
+        <div class="checkout-layout">
+            <div class="billing-side">
+                <h2 class="section-title">BILLING DETAILS</h2>
+                
+                <div class="field-row">
+                    <div class="field">
+                        <label>FIRST NAME *</label>
+                        <input type="text" class="billing-input" id="f-name" required>
+                    </div>
+                    <div class="field">
+                        <label>LAST NAME *</label>
+                        <input type="text" class="billing-input" id="l-name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>COMPANY NAME (OPTIONAL)</label>
+                    <input type="text">
+                </div>
+
+                <div class="field">
+                    <label>COUNTRY / REGION *</label>
+                    <select class="billing-input"><option>UNITED STATES (US)</option></select>
+                </div>
+
+                <div class="field">
+                    <label>STREET ADDRESS *</label>
+                    <input type="text" class="billing-input" id="addr1" placeholder="HOUSE NUMBER AND STREET NAME">
+                    <input type="text" placeholder="APARTMENT, SUITE, UNIT, ETC." style="margin-top:15px;">
+                </div>
+
+                <div class="field">
+                    <label>POSTCODE / ZIP *</label>
+                    <input type="text" class="billing-input" id="zip">
+                </div>
+
+                <div class="field">
+                    <label>PHONE *</label>
+                    <input type="tel" class="billing-input" id="phone">
+                </div>
+
+                <div class="field">
+                    <label>EMAIL ADDRESS *</label>
+                    <input type="email" class="billing-input" id="email">
+                </div>
+
+                <h2 class="section-title" style="margin-top:40px;">ADDITIONAL INFORMATION</h2>
+                <div class="field">
+                    <label>ORDER NOTES (OPTIONAL)</label>
+                    <textarea placeholder="NOTES ABOUT YOUR ORDER"></textarea>
+                </div>
+            </div>
+
+            <div class="order-side">
+                <div class="order-card">
+                    <h2 class="section-title">YOUR ORDER</h2>
+                    <div class="order-table-header" style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+                        <span>PRODUCT</span>
+                        <span>SUBTOTAL</span>
+                    </div>
+                    
+                    <div id="order-items-list"></div>
+
+                    <div class="order-row total-line" style="display: flex; justify-content: space-between; margin-top: 20px; font-weight: 800; border-top: 2px solid #000; padding-top: 15px;">
+                        <span>TOTAL</span>
+                        <span id="final-checkout-total">$0.00</span>
+                    </div>
+
+                    <div class="payment-notice">
+                        <p style="color: #86868b; font-size: 12px;">SECURE PAYMENT VIA ENCRYPTED GATEWAY.</p>
+                    </div>
+
+                    <button href="payment.html" class="place-order-btn" onclick="validateAndGoToPayment()">PLACE ORDER</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../JS/main.js"></script>
+   <script>
+    // 1. Get the private locker name for the logged-in user
+    const currentUser = localStorage.getItem('userName') || localStorage.getItem('loggedInUser');
+    const cartKey = currentUser ? `cart_${currentUser}` : 'cart';
+
+    window.addEventListener('DOMContentLoaded', () => {
+        // Only render if a user is logged in
+        if (currentUser) {
+            renderCheckout();
+        } else {
+            alert("PLEASE LOG IN TO CHECKOUT");
+            window.location.href = 'login.html';
+        }
+    });
+
+    function renderCheckout() {
+        // 2. Pull data from the PRIVATE key
+        const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+        const listContainer = document.getElementById('order-items-list');
+        let total = 0;
+
+        if (cart.length === 0) {
+            listContainer.innerHTML = "<p style='color:#86868b; font-size:12px;'>YOUR BAG IS EMPTY.</p>";
+            document.getElementById('final-checkout-total').innerText = "$0.00";
+            return;
+        }
+
+        listContainer.innerHTML = cart.map(item => {
+            const qty = item.quantity || 1;
+            const itemTotal = item.price * qty;
+            total += itemTotal;
+            return `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px; font-weight: 600;">
+                    <span>${item.name} x ${qty}</span>
+                    <span>$${itemTotal.toFixed(2)}</span>
+                </div>
+            `;
+        }).join('');
+
+        document.getElementById('final-checkout-total').innerText = `$${total.toFixed(2)}`;
+    }
+
+    function validateAndGoToPayment() {
+        const inputs = document.querySelectorAll('.billing-input');
+        let isFormValid = true;
+
+        inputs.forEach(input => {
+            if (input.value.trim() === "") {
+                isFormValid = false;
+                input.style.border = "1px solid #ff3b30";
+            } else {
+                input.style.border = "1px solid #ddd";
+            }
+        });
+
+        if (!isFormValid) {
+            alert("PLEASE FILL ALL REQUIRED (*) BILLING DETAILS.");
+        } else {
+            const firstName = document.getElementById('f-name').value;
+            localStorage.setItem('customerName', firstName);
+            window.location.href = 'payment.html';
+        }
+    }
+</script>
+
+    <footer>
+    <div class="footer-container">
+        <div class="footer-col brand">
+            <h3>🖱️ Gadgets</h3>
+            <p>Cras gravida bibendum dolor eu varius morbi fermentum velit eget vehicula lorem sodales donec quis volutpat orci.</p>
+            <div class="social-icons">
+                <span class="s-icon">f</span>
+                <span class="s-icon">t</span>
+                <span class="s-icon">in</span>
+                <span class="s-icon">M</span>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>USEFUL LINKS</h4>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="#">Sign Up</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>CUSTOM AREA</h4>
+            <ul>
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Tracking List</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Orders</a></li>
+                <li><a href="#">My Cart</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>MORE INFORMATION</h4>
+            <p>Aliquam faucibus, odio nec commodo aliquam, neque felis placerat dui, a porta ante lectus.</p>
+            <div class="payment-methods">
+                <span>💳 VISA</span>
+                <span>💳 AMEX</span>
+                <span>💳 PayPal</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>Copyright © 2026 - UK TECHUB Project</p>
+    </div>
+</footer>
+
+</body>
+</html>
