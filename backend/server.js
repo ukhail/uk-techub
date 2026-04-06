@@ -126,7 +126,7 @@ app.get('/api/admin/users', async (req, res) => {
 });
 
 // --- 9. SERVER START ---
-const PORT = 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`🚀 UKTECHUB SERVER IS LIVE AT: http://localhost:${PORT}`);
 });
