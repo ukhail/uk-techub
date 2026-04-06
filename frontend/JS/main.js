@@ -33,7 +33,7 @@ function getUserKey(baseName) {
 // ==========================================
 async function loadProducts() {
     try {
-        const response = await fetch('http://localhost:5000/api/product');
+        const response = await fetch('https://uk-techub-1.onrender.com/api/product');
         const data = await response.json();
         const displayArea = document.getElementById('featured-products-grid');
         
@@ -45,7 +45,7 @@ async function loadProducts() {
             const productCard = `
                 <div class="product-card">
                     <div class="img-container">
-                       <img src="http://localhost:5000/image/${item.image}" alt="${item.name}">
+                      <img src="https://uk-techub-1.onrender.com/image/${item.image}" alt="${item.name}">
                     </div>
                     <div class="product-info">
                         <h3>${item.name}</h3>
@@ -115,7 +115,7 @@ function updateMiniCart() {
         total += itemSubtotal;
         return `
             <div class="mini-item" style="display:flex; align-items:center; gap:10px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:8px;">
-                <img src="http://localhost:5000/image/${item.image}" style="width:45px; height:45px; object-fit:contain; background:white; border-radius:8px; padding:2px;">
+               <img src="https://uk-techub-1.onrender.com/image/${item.image}" style="width:45px; height:45px; object-fit:contain; background:white; border-radius:8px; padding:2px;">
                 <div class="mini-details" style="flex:1;">
                     <p style="margin:0; font-size:12px; font-weight:700; color:white;">${item.name}</p>
                     <span style="font-size:11px; color:#86868b;">${item.quantity} x $${item.price}</span>
