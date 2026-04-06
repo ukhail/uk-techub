@@ -2,7 +2,7 @@ async function loadAllProducts() {
     try {
        // Change the URL inside your fetch function
 // Point this to the main working route
-const response = await fetch('http://localhost:5000/api/product');
+const response = await fetch('http://uk-techub-1.onrender.com/api/product');
         const data = await response.json();
         
         console.log("Database Response:", data); // Check F12 in Chrome to see this!
@@ -19,7 +19,7 @@ const response = await fetch('http://localhost:5000/api/product');
     const productCard = `
         <div class="product-card">
             <div class="img-container">
-                <img src="http://localhost:5000/image/${item.image}" alt="${item.name}">
+                <img src="http://uk-techub-1.onrender.com/image/${item.image}" alt="${item.name}">
             </div>
             <h3>${item.name}</h3>
             <p class="item-price">$${item.price}.00</p>
