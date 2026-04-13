@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gadgets - UK TECHUB</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/service.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="service-page-header">
+    <nav class="navbar">
+        <div class="logo">🖱️ Gadgets</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="aboutus.html">ABOUT US</a></li>
+            <li><a href="services.html" class="active">SERVICES</a></li>
+            <li><a href="contactus.html">CONTACT US</a></li>
+        </ul>
+         
+    </ul>
+
+</nav>
+    </nav>
+
+    <div class="header-content">
+        <p style="color: #86868b; font-size: 12px; letter-spacing: 3px; margin-bottom: 10px;">EXPERT CARE</p>
+        <h1>SERVICES</h1>
+    </div>
+</header>
+
+<main class="service-container">
+    <div class="service-form-wrapper">
+        <h2 class="service-title">BOOK A DEVICE SERVICE</h2>
+        <p class="service-subtitle">TELL US WHAT'S WRONG WITH YOUR DEVICE , AND OUR TECHNICIAN WILL GET BACK TO YOU WITH A QUOTE.</p>
+
+        <div class="service-form">
+            <div class="input-row">
+                <input type="text" class="quote-input" placeholder="Full Name *" required va>
+                <input type="email" class="quote-input" placeholder="Email Address *" required>
+            </div>
+
+            <div class="input-row">
+                <input type="text" class="quote-input" placeholder="Phone Model (e.g. iPhone 15 Pro) *" required>
+                <input type="number" class="quote-input" placeholder="Phone Number (10 Digits) *" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+            </div>
+
+            <div class="input-full">
+                <select class="quote-input service-select" required style="width: 100%; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;">
+                    <option value="" disabled selected>Select Service Type *</option>
+                    <option value="screen">Screen Replacement</option>
+                    <option value="battery">Battery Replacement</option>
+                    <option value="water">Water Damage Repair</option>
+                    <option value="software">Software / Unlocking</option>
+                    <option value="other">Other Issue</option>
+                </select>
+            </div>
+
+            <div class="input-full">
+                <textarea class="quote-input" placeholder="Describe the problem in detail (e.g. cracked screen, won't charge) *" rows="5" required style="width: 100%; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;"></textarea>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="add-to-cart-btn" onclick="validateAndQuote(this)" style="padding: 15px 40px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;">
+                    REQUEST QUOTE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="service-popup" style="position: fixed; top: 30px; right: -400px; width: 350px; background: #1c1c1e; color: white; padding: 20px; border-radius: 16px; border-left: 5px solid #0071e3; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 99999; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 24px;">📩</span>
+        <div>
+            <h4 style="margin: 0; font-size: 11px; color: #000000; letter-spacing: 1px; text-transform: uppercase;">Request Sent</h4>
+            <p style="margin: 5px 0 0; font-size: 13px; color: #d2d2d7; text-transform: none; line-height: 1.4;">Our service team will contact you in a bit!</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-col brand">
+            <h3>🖱️ UK TECHUB</h3>
+            <p>Your premier destination for the latest in flagship smartphones, high-performance laptops, and premium audio ecosystems. Experience tech refined.</p>
+            <div class="social-icons">
+                <span class="s-icon">X<i class="fa-brands fa-x-twitter"></i></span>
+                <span class="s-icon">F<i class="fa-brands fa-instagram"></i></span>
+                <span class="s-icon">LI<i class="fa-brands fa-linkedin-in"></i></span>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>EXPLORE TECH</h4>
+            <ul>
+                <li><a href="smartphones.html">Smartphones</a></li>
+                <li><a href="laptops.html">Laptops</a></li>
+                <li><a href="airpods.html">Audio & Sound</a></li>
+                <li><a href="watches.html">Wearables</a></li>
+                <li><a href="gaming.html">Gaming Gear</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>SUPPORT</h4>
+            <ul>
+                <li><a href="service.html">Repair Services</a></li>
+                <li><a href="myorders.html">Track Order</a></li>
+                <li><a href="aboutus.html">Our Story</a></li>
+                <li><a href="contactus.html">Get Help</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>PAYMENT SECURE</h4>
+            <p>Shop with confidence using our encrypted checkout gateway.</p>
+            <div class="payment-methods" style="margin-top: 20px; font-size: 20px; gap: 15px; display: flex;">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-apple-pay"></i>
+                <i class="fa-brands fa-paypal"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>Copyright © 2026 - UK TECHUB. All Rights Reserved.</p>
+    </div>
+</footer>
+
+
+<script>
+function validateAndQuote(btn) {
+    const container = btn.closest('.service-form');
+    const inputs = container.querySelectorAll('.quote-input');
+    const popup = document.getElementById('service-popup');
+
+    // 1. Capture all values
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    const model = inputs[2].value.trim();
+    const phone = inputs[3].value.trim();
+    
+    // Select the dropdown and textarea specifically
+    const serviceType = container.querySelector('.service-select').value;
+    const description = container.querySelector('textarea').value.trim();
+
+    // 2. STRICTURE VALIDATION
+    // Check if any field is empty
+    if (!name || !email || !model || !phone || !serviceType || !description) {
+        alert("⚠️ All fields marked with * are required!");
+        return;
+    }
+
+    // 3. EMAIL VALIDATION (Regex)
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("📧 Please enter a valid email address (e.g., name@mail.com)");
+        return;
+    }
+
+    // 4. PHONE VALIDATION (Exactly 10 digits)
+    const phonePattern = /^\d{10}$/;
+    if (!phonePattern.test(phone)) {
+        alert("📱 Please enter a valid 10-digit phone number!");
+        return;
+    }
+
+    // --- SUCCESS LOGIC ---
+
+    // 5. Trigger the top-right slide
+    popup.style.right = "30px";
+
+    // 6. Clear all inputs
+    inputs.forEach(i => i.value = "");
+    container.querySelector('.service-select').selectedIndex = 0; // Reset dropdown
+    container.querySelector('textarea').value = ""; // Reset textarea
+
+    // 7. Hide after 4 seconds
+    setTimeout(() => {
+        popup.style.right = "-400px";
+    }, 4000);
+}
+</script>
+ 
+</body>
+</html>

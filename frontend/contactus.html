@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - UK TECHUB</title>
+    <link rel="stylesheet" href="../CSS/style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        *{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}
+        :root { --blue: #0071e3; --bg: #f5f5f7; --glass: rgba(255, 255, 255, 0.8); }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fff; overflow-x: hidden; }
+        
+        /* NAVBAR OVERRIDE (To ensure visibility on dark header) */
+        .navbar { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 1000; }
+
+        /* HEADER SECTION */
+        .contact-header { background: #0d1117; color: #fff; padding: 120px 20px 100px; text-align: center; }
+        .contact-header h1 { font-size: 56px; font-weight: 800; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
+
+        /* INFO CARDS */
+        .info-section { display: flex; justify-content: center; gap: 30px; margin-top: -60px; padding: 0 8%; position: relative; z-index: 5; }
+        .info-card { background: #fff; padding: 35px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.06); flex: 1; text-align: center; min-width: 250px; border: 1px solid #f5f5f7; }
+        .info-card i { color: #ff3b30; font-size: 28px; margin-bottom: 20px; }
+        .info-card p { font-size: 14px; color: #1d1d1f; line-height: 1.6; margin: 5px 0; font-weight: 600; text-transform: uppercase; }
+
+        /* MAIN LAYOUT */
+        .main-content { display: flex; padding: 100px 8%; gap: 60px; flex-wrap: wrap; align-items: flex-start; }
+        .map-box { flex: 1.2; min-width: 450px; border-radius: 24px; overflow: hidden; height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #d2d2d7; }
+        .form-box { flex: 1; min-width: 400px; }
+        .form-box h2 { font-size: 12px; color: #86868b; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* FORM INPUTS */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        input, textarea { width: 100%; padding: 18px; border: 1.5px solid #d2d2d7; border-radius: 14px; font-size: 14px; outline: none; box-sizing: border-box; font-weight: 500; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        textarea { height: 150px; resize: none; }
+
+        .send-btn { background: #1d1d1f; color: #fff; border: none; padding: 18px 45px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 25px; transition: 0.3s; width: 100%; letter-spacing: 1px; }
+        .send-btn:hover { background: #000; transform: translateY(-2px); }
+
+        /* FOOTER */
+        footer { background: #000; color: #fff; padding: 80px 8% 40px; margin-top: 100px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; }
+        .footer-col h4 { font-size: 14px; color: #fff; margin-bottom: 25px; letter-spacing: 1px; }
+        .footer-col p, .footer-col li { font-size: 13px; color: #86868b; list-style: none; margin-bottom: 12px; font-weight: 400; cursor: pointer; }
+        .footer-col li:hover { color: #fff; }
+        .footer-bottom { border-top: 1px solid #222; margin-top: 60px; padding-top: 30px; text-align: center; font-size: 12px; color: #424245; letter-spacing: 1px; }
+
+        /* SUCCESS POPUP */
+        #msg-popup { display: none; position: fixed; top: 100px; right: 30px; background: #30d158; color: #fff; padding: 20px 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(48,209,88,0.3); z-index: 10001; font-weight: 700; animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🖱️ UKTECHUB</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="aboutus.html">ABOUT US</a></li>
+            <li><a href="service.html">SERVICES</a></li>
+            <li><a href="contactus.html" class="active">CONTACT US</a></li>
+        </ul>
+    </nav>
+
+    <header class="contact-header">
+        <p style="color: #86868b; font-size: 12px; letter-spacing: 3px; margin-bottom: 10px;">GET IN TOUCH</p>
+        <h1>CONTACT US</h1>
+    </header>
+
+    <div class="info-section">
+        <div class="info-card">
+            <i class="fa-solid fa-location-dot"></i>
+            <p>UK TECHUB </p>
+            <p style="color: #86868b; font-weight: 400;">CHENNIA , INDIA</p>
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-phone"></i>
+            <p>+91 88384 86722</p>
+            <p style="color: #86868b; font-weight: 400;">1-800-UK-TECH</p>
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-envelope"></i>
+            <p>SUPPORT@UKTECHUB.COM</p>
+            <p style="color: #86868b; font-weight: 400;">SALES@UKTECHUB.COM</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="map-box">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.841577717462!2d80.25686017590806!3d13.045731713251433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52662f55555555%3A0x7000000000000000!2sThe%20New%20College!5e0!3m2!1sen!2sin!4v1711710000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <div class="form-box">
+            <h2>HAVE A QUESTION? SEND US A MESSAGE.</h2>
+            <form id="contactForm">
+                <div class="form-grid">
+                    <input type="text" id="fname" placeholder="FIRST NAME *" required>
+                    <input type="text" id="lname" placeholder="LAST NAME *" required>
+                    <input type="email" id="email" placeholder="YOUR EMAIL *" required class="full-width">
+                    <input type="text" id="subject" placeholder="SUBJECT *" required class="full-width">
+                    <input type="number" id="phone" placeholder="ENTER YOUR NUMBER *" required class="full-width">
+                    <textarea id="message" placeholder="YOUR MESSAGE *" required class="full-width"></textarea>
+                </div>
+                <button type="submit" class="send-btn">SEND MESSAGE</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="msg-popup">🚀 MESSAGE SENT SUCCESSFULLY!</div>
+
+   <footer>
+    <div class="footer-container">
+        <div class="footer-col brand">
+            <h3>🖱️ UK TECHUB</h3>
+            <p>Your premier destination for the latest in flagship smartphones, high-performance laptops, and premium audio ecosystems. Experience tech refined.</p>
+            <div class="social-icons">
+                <span class="s-icon">f<i class="fa-brands fa-x-twitter"></i></span>
+                <span class="s-icon"><i class="fa-brands fa-instagram"></i></span>
+                <span class="s-icon"><i class="fa-brands fa-linkedin-in"></i></span>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>EXPLORE TECH</h4>
+            <ul>
+                <li><a href="smartphones.html">Smartphones</a></li>
+                <li><a href="laptops.html">Laptops</a></li>
+                <li><a href="airpods.html">Audio & Sound</a></li>
+                <li><a href="watches.html">Wearables</a></li>
+                <li><a href="gaming.html">Gaming Gear</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>SUPPORT</h4>
+            <ul>
+                <li><a href="service.html">Repair Services</a></li>
+                <li><a href="myorders.html">Track Order</a></li>
+                <li><a href="aboutus.html">Our Story</a></li>
+                <li><a href="contactus.html">Get Help</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>PAYMENT SECURE</h4>
+            <p>Shop with confidence using our encrypted checkout gateway.</p>
+            <div class="payment-methods" style="margin-top: 20px; font-size: 20px; gap: 15px; display: flex;">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-apple-pay"></i>
+                <i class="fa-brands fa-paypal"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>Copyright © 2026 - UK TECHUB. All Rights Reserved.</p>
+    </div>
+</footer>
+
+    <script>
+        // HANDLE FORM SUBMISSION & VALIDATION
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple validation check before showing popup
+            const fname = document.getElementById('fname').value;
+            const email = document.getElementById('email').value;
+
+            if(fname && email) {
+                // Show Success Popup
+                const popup = document.getElementById('msg-popup');
+                popup.style.display = 'block';
+
+                // Reset Form Fields
+                this.reset();
+
+                // Hide Popup after 4 seconds
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 4000);
+            }
+        });
+
+        // Initialize Cart Count (From your localStorage logic)
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cart-count').innerText = `(${cart.length})`;
+        }
+        updateCartCount();
+    </script>
+</body>
+</html>

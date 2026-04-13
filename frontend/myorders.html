@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - UK TECHUB</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <style>
+        body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; margin: 0; }
+        .orders-container { max-width: 1000px; margin: 140px auto; padding: 0 20px; min-height: 80vh; }
+        .page-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 50px; }
+        .page-title { font-size: 48px; font-weight: 800; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
+        
+        /* UPDATED GRID CARD STYLING */
+        .order-row-card {
+            background: #111112;
+            border: 1px solid #2c2c2e;
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr 1.5fr;
+            align-items: center;
+            transition: 0.3s ease;
+        }
+        .order-row-card:hover { border-color: #0071e3; background: #161617; transform: translateY(-2px); }
+
+        .col { display: flex; flex-direction: column; gap: 5px; }
+        .label-small { font-size: 10px; color: #86868b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+        .order-data { font-size: 16px; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
+        .blue-text { color: #0071e3; }
+
+        /* STATUS BADGES */
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: inline-block;
+            width: fit-content;
+            text-transform: uppercase;
+        }
+        .paid-style { background: rgba(48, 209, 88, 0.12); color: #30d158; border: 1px solid rgba(48, 209, 88, 0.2); }
+        .cod-style { background: rgba(255, 159, 10, 0.12); color: #ff9f0a; border: 1px solid rgba(255, 159, 10, 0.2); }
+
+        .no-orders { text-align: center; padding: 100px 0; color: #86868b; border: 1px dashed #333; border-radius: 20px; font-weight: 600; }
+        .shop-btn { color: #0071e3; text-decoration: none; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .shop-btn:hover { color: #40a9ff; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🖱️ UKTECHUB</div>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="products.html">PRODUCTS</a></li>
+            <li><a href="aboutus.html">ABOUT US</a></li>
+            <li><a href="service.html">SERVICES</a></li>
+            <li><a href="contactus.html">CONTACT US</a></li>
+        </ul>
+    </nav>
+
+    <main class="orders-container">
+        <div class="page-header">
+            <h1 class="page-title">My Orders</h1>
+            <a href="products.html" class="shop-btn">← Continue Shopping</a>
+        </div>
+        
+        <div id="full-order-list"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderOrders();
+        });
+
+        function renderOrders() {
+            // Get user session key
+            const currentUser = localStorage.getItem('userName') || localStorage.getItem('loggedInUser');
+            const historyKey = currentUser ? `orderHistory_${currentUser}` : 'orderHistory';
+            const history = JSON.parse(localStorage.getItem(historyKey)) || [];
+            
+            // FIXED: Target 'full-order-list' to match HTML ID
+            const container = document.getElementById('full-order-list'); 
+
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="no-orders">
+                        <p>NO ORDERS PLACED YET.</p>
+                        <a href="products.html" class="shop-btn" style="font-size:12px;">Start your first purchase</a>
+                    </div>`;
+                return;
+            }
+
+            // Reverse to show newest first
+            container.innerHTML = history.reverse().map(order => {
+                let statusText = "";
+                let statusClass = "status-badge";
+
+                // Logic for dynamic status
+                if (order.method === "COD") {
+                    statusText = "CASH ON DELIVERY";
+                    statusClass += " cod-style"; 
+                } else {
+                    statusText = `PAID VIA ${order.method}`;
+                    statusClass += " paid-style"; 
+                }
+
+                return `
+                    <div class="order-row-card">
+                        <div class="col">
+                            <span class="label-small">ORDER ID</span>
+                            <p class="order-data blue-text">${order.id}</p>
+                        </div>
+                        <div class="col">
+                            <span class="label-small">DATE</span>
+                            <p class="order-data">${order.date}</p>
+                        </div>
+                        <div class="col">
+                            <span class="label-small">TOTAL AMOUNT</span>
+                            <p class="order-data">$${order.amount}</p>
+                        </div>
+                        <div class="col">
+                            <span class="label-small">STATUS</span>
+                            <span class="${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>

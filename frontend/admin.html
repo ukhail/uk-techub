@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UKTECHUB | Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --bg: #000; --card: #111; --accent: #0071e3; --border: #222; --text: #86868b; }
+        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; margin: 0; display: flex; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 260px; height: 100vh; background: #080808; border-right: 1px solid var(--border); padding: 40px 20px; box-sizing: border-box; }
+        .sidebar h2 { color: var(--accent); font-size: 20px; margin-bottom: 40px; letter-spacing: 1px; }
+        .nav-item { padding: 14px 18px; cursor: pointer; color: var(--text); transition: 0.3s; display: block; text-decoration: none; border-radius: 10px; margin-bottom: 10px; font-size: 14px; }
+        .nav-item:hover, .nav-item.active { color: #fff; background: rgba(0, 113, 227, 0.1); border-left: 3px solid var(--accent); }
+
+        /* CONTENT AREA */
+        .content-wrapper { flex: 1; height: 100vh; overflow-y: auto; padding: 50px; box-sizing: border-box; }
+        .admin-section { display: none; animation: fadeIn 0.4s ease; }
+        .admin-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* UI COMPONENTS */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: var(--card); padding: 25px; border-radius: 18px; border: 1px solid var(--border); }
+        .chart-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 30px; }
+        
+        /* TABLES */
+        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
+        th { text-align: left; padding: 20px; background: #1c1c1e; color: var(--text); font-size: 11px; text-transform: uppercase; }
+        td { padding: 20px; border-top: 1px solid var(--border); font-size: 13px; color: #eee; }
+
+        /* FORM */
+        .form-card { max-width: 500px; background: var(--card); padding: 40px; border-radius: 20px; border: 1px solid var(--border); }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 10px; box-sizing: border-box; }
+        .btn-blue { background: var(--accent); color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>UKTECHUB</h2>
+        <div class="nav-item active" onclick="showSection('dashboard')">Dashboard</div>
+        <div class="nav-item" onclick="showSection('products')">Manage Products</div>
+        <div class="nav-item" onclick="showSection('orders')">Purchases</div>
+        <div class="nav-item" onclick="showSection('users')">Users List</div>
+        <a href="index.html" class="nav-item" style="margin-top: 50px; color: #ff3b30;">Logout</a>
+    </div>
+
+    <div class="content-wrapper">
+        <div id="dashboard" class="admin-section active">
+            <h1>Admin Overview</h1>
+            <div class="stats-grid">
+                <div class="stat-card"><h4>Revenue</h4><p id="total-income">₹0.00</p></div>
+                <div class="stat-card"><h4>Sales</h4><p id="order-count">0</p></div>
+                <div class="stat-card"><h4>Users</h4><p id="user-count">0</p></div>
+                <div class="stat-card"><h4>Status</h4><p style="color:#30d158">LIVE</p></div>
+            </div>
+            <div class="chart-box"><canvas id="salesChart" height="100"></canvas></div>
+        </div>
+
+        <div class="shortlist-bar" style="display: flex; gap: 15px; align-items: center; margin-bottom: 30px; background: #080808; padding: 15px; border-radius: 12px; border: 1px solid #222;">
+    
+    <div style="display: flex; gap: 10px; align-items: flex-end;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-size: 10px; color: #86868b; text-transform: uppercase;">Day</label>
+            <select id="filterDay" onchange="loadInventory()" style="background: #111; color: white; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                <option value="all">All Days</option>
+                <script>for(let i=1;i<=31;i++) document.write(`<option value="${i}">${i}</option>`)</script>
+            </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-size: 10px; color: #86868b; text-transform: uppercase;">Month</label>
+            <select id="filterMonth" onchange="loadInventory()" style="background: #111; color: white; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                <option value="all">All Months</option>
+                <option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option>
+                <option value="3">Apr</option><option value="4">May</option><option value="5">Jun</option>
+                <option value="6">Jul</option><option value="7">Aug</option><option value="8">Sep</option>
+                <option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option>
+            </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-size: 10px; color: #86868b; text-transform: uppercase;">Year</label>
+            <select id="filterYear" onchange="loadInventory()" style="background: #111; color: white; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                <option value="all">All Years</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 5px; margin-left: 10px;">
+        <label style="font-size: 10px; color: #86868b; text-transform: uppercase;">Product Name</label>
+        <select id="nameSort" onchange="loadInventory()" style="background: #111; color: white; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer;">
+            <option value="none">Default</option>
+            <option value="az">A to Z</option>
+            <option value="za">Z to A</option>
+        </select>
+    </div>
+    
+    <button onclick="location.reload()" style="margin-left: auto; background: none; border: 1px solid #444; color: #86868b; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px;">RESET ALL</button>
+</div>
+
+
+         <div id="products" class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <p style="color: var(--text); font-size: 13px;">Manage your live store items</p>
+            </div>
+            <div id="admin-product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;"></div>
+            
+            <div id="add-product-fab" onclick="toggleProductPopup()" 
+                 style="position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: #fff; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,113,227,0.4); z-index: 100;">
+                +
+            </div>
+        </div>
+
+        
+
+<div id="admin-product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+    </div>
+
+       
+
+       
+
+<div id="admin-product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+    </div>
+
+       <div id="product-popup-overlay" 
+     style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; pointer-events: auto;">
+    
+    <div class="form-card" style="position: relative; width: 400px; background: #111; border: 1px solid #333; padding: 40px; border-radius: 20px; z-index: 10000;">
+        <span onclick="toggleProductPopup()" style="position: absolute; top: 20px; right: 20px; cursor: pointer; color: #86868b; font-size: 20px;">✕</span>
+        
+        <h2 style="margin-bottom: 25px; color: white;">New Product</h2>
+        
+        <input type="text" id="pName" placeholder="Product Name">
+        
+        <input type="number" id="pPrice" placeholder="Price (INR)">
+        
+        <input type="date" id="pDate" style="color-scheme: dark;"> 
+        
+        <input type="text" id="pImage" placeholder="Image Filename (e.g. iphone.jpg)">
+
+        <input type="text" id="pCategory" placeholder="Category (e.g. Laptops, AirPods)">
+
+        <button class="btn-blue" onclick="addNewProduct()" style="margin-top: 10px;">Add to Store</button>
+    </div>
+</div>
+
+        <div id="orders" class="admin-section">
+            <h1>Purchase History</h1>
+            <table>
+                <thead>
+                    <tr><th>ORDER ID</th><th>ITEMS</th><th>TOTAL COST</th><th>DATE</th><th>STATUS</th></tr>
+                </thead>
+                <tbody id="purchase-rows"></tbody>
+            </table>
+        </div>
+
+        <div id="users" class="admin-section">
+            <h1>Registered Users</h1>
+            <table>
+                <thead><tr><th>NAME</th><th>EMAIL</th><th>USER ID</th></tr></thead>
+                <tbody id="user-rows"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    // NAVIGATION
+    function showSection(sectionId) {
+        document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    window.onload = async () => {
+        loadAllData();
+        loadInventory();
+        renderSalesChart();
+    };
+
+    // LOAD DASHBOARD DATA
+    async function loadAllData() {
+        const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        let income = 0;
+        orders.forEach(o => income += parseFloat(o.amount));
+        
+        document.getElementById('total-income').innerText = `₹${income.toFixed(2)}`;
+        document.getElementById('order-count').innerText = orders.length;
+
+        document.getElementById('purchase-rows').innerHTML = orders.reverse().map(o => `
+            <tr>
+                <td style="color:#0071e3; font-weight:bold;">${o.id}</td>
+                <td>${o.items || 'Tech Bundle'}</td>
+                <td>₹${o.amount}</td>
+                <td>${o.date}</td>
+                <td><span style="background:rgba(48,209,88,0.1); color:#30d158; padding:4px 8px; border-radius:5px;">PAID</span></td>
+            </tr>
+        `).join('');
+
+        try {
+            const res = await fetch('https://uk-techub-1.onrender.com/api/admin/users');
+            const users = await res.json();
+            document.getElementById('user-count').innerText = users.length;
+            document.getElementById('user-rows').innerHTML = users.map(u => `
+                <tr><td>${u.name}</td><td>${u.email}</td><td>${u._id.substring(0,8)}...</td></tr>
+            `).join('');
+        } catch(e) { console.log("User fetch failed"); }
+    }
+
+    async function loadInventory() {
+        try {
+            const response = await fetch('https://uk-techub-1.onrender.com/api/product');
+            let data = await response.json();
+            const grid = document.getElementById('admin-product-grid');
+            
+            const day = document.getElementById('filterDay').value;
+            const month = document.getElementById('filterMonth').value;
+            const year = document.getElementById('filterYear').value;
+            const nameOrder = document.getElementById('nameSort').value;
+
+            // --- 1. FILTERING ENGINE ---
+            data = data.filter(item => {
+                const date = new Date(item.createdAt);
+                const matchDay = (day === 'all' || date.getDate() == day);
+                const matchMonth = (month === 'all' || date.getMonth() == month);
+                const matchYear = (year === 'all' || date.getFullYear() == year);
+                return matchDay && matchMonth && matchYear;
+            });
+
+            // --- 2. SORTING ENGINE (Name) ---
+            if (nameOrder === 'az') data.sort((a, b) => a.name.localeCompare(b.name));
+            else if (nameOrder === 'za') data.sort((a, b) => b.name.localeCompare(a.name));
+
+            // --- 3. RENDERING ---
+            grid.innerHTML = data.length ? data.map(item => {
+                const dateObj = new Date(item.createdAt);
+                const formattedDate = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                return `
+                    <div style="background: #111; border: 1px solid #222; padding: 20px; border-radius: 15px; text-align: center; position: relative;">
+                        <span style="position: absolute; top: 12px; right: 12px; font-size: 9px; color: #0071e3; font-weight: bold; background: rgba(0,113,227,0.1); padding: 2px 6px; border-radius: 4px;">${formattedDate}</span>
+                        <img src="https://uk-techub-1.onrender.com/image/${item.image}" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.src='/image/placeholder.png'">
+                        <h4 style="margin: 5px 0; font-size: 14px; color: white;">${item.name}</h4>
+                        <p style="color: #0071e3; font-weight: bold; margin: 5px 0;">₹${item.price}</p>
+                        <button onclick="removeProduct('${item._id}')" style="background: none; border: 1px solid #ff3b30; color: #ff3b30; padding: 5px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; margin-top: 10px; width: 100%;">REMOVE</button>
+                    </div>
+                `;
+            }).join('') : `<p style="color:#86868b; width:100%; text-align:center;">No products found.</p>`;
+
+        } catch (err) { console.error(err); }
+    }
+
+    // UPDATED ADD PRODUCT LOGIC
+    async function addNewProduct() {
+        const nameEl = document.getElementById('pName');
+        const priceEl = document.getElementById('pPrice');
+        const imageEl = document.getElementById('pImage');
+        const dateEl = document.getElementById('pDate');
+        const categoryEl = document.getElementById('pCategory'); // CAPTURE CATEGORY
+
+        if (!nameEl || !priceEl || !imageEl || !dateEl || !categoryEl) {
+            console.error("Critical IDs missing from HTML!");
+            return;
+        }
+
+       const product = {
+    name: nameEl.value.trim(),
+    price: parseFloat(priceEl.value),
+    image: imageEl.value.trim(),
+    category: document.getElementById('pCategory').value.trim(), // IS THIS LINE HERE?
+    createdAt: dateEl.value,
+    description: "Premium Tech Arrival"
+};
+
+        // Strict Validation including Category
+        if (!product.name || isNaN(product.price) || !product.image || !product.createdAt || !product.category) {
+            alert("⚠️ Please fill in all fields correctly, including the Category!");
+            return;
+        }
+
+        try {
+            const res = await fetch('https://uk-techub-1.onrender.com/api/product/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            });
+
+            const result = await res.json();
+
+            if (res.ok) {
+                alert("🚀 PRODUCT IS NOW LIVE!");
+                location.reload(); 
+            } else {
+                alert("❌ Server Error: " + (result.message || "Could not save product"));
+            }
+        } catch (e) {
+            console.error("Connection Error:", e);
+            alert("📡 Server connection failed! Is your 'node server.js' running?");
+        }
+    }
+
+    async function removeProduct(id) {
+        if(confirm("Remove this product from store?")) {
+            try {
+                const res = await fetch(`https://uk-techub-1.onrender.com/api/product/delete/${id}`, { method: 'DELETE' });
+                if(res.ok) { 
+                    alert("Deleted!"); 
+                    loadInventory(); 
+                }
+            } catch(err) { alert("Error deleting"); }
+        }
+    }
+
+    function toggleProductPopup() {
+        const overlay = document.getElementById('product-popup-overlay');
+        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function renderSalesChart() {
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [50000, 120000, 80000, 250000, 180000, 300000, 420000],
+                    borderColor: '#0071e3',
+                    backgroundColor: 'rgba(0,113,227,0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#222' } }, x: { grid: { display: false } } } }
+        });
+    }
+</script>
+</body>
+</html>fvrgbtnbunhtrhyntrn
